@@ -19,6 +19,18 @@ export default {
 			blue:{
 				1:'#0E78F9',
 			},
+			sky:{
+				1: '#C9DDFF'
+			},
+			orange: {
+				1: '#FF742E',
+			  },
+			  purple: {
+				1: '#830EF9',
+			  },
+			  yellow: {
+				1: '#F9A90E',
+			  },
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -58,6 +70,9 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+		backgroundImage: {
+			hero: "url('/images/hero-background.png')"
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
