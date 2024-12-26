@@ -1,11 +1,15 @@
+import CallList from '@/components/CallList'
 import React from 'react'
 
 const Upcoming = () => {
   return (
-    <section className='flex size-full flex-col text-white'>
+    <section className='flex size-full flex-col gap-5 text-white'>
       <h1 className='text-3xl font-bold'>
-      Upcoming
+      Upcoming Meetings
       </h1>
+      <CallList
+        type='upcoming'
+      />
     </section>
   )
 }
