@@ -10,7 +10,7 @@ import React, { useState } from 'react'
 
 // Use the new React hook to unwrap params properly
 const Meeting = ({ params }: { params: { id: string } }) => {
-  const { user, isLoaded } = useUser()
+  const {  isLoaded } = useUser()
   const [isSetupComplete, setIsSetupComplete] = useState(false)
 
   const { id } = React.use(params)  
