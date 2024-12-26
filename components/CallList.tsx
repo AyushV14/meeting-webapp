@@ -12,6 +12,11 @@ function isCall(meeting: Call | CallRecording): meeting is Call {
   return (meeting as Call).state !== undefined;
 }
 
+// Type Guard to check if a meeting is of type CallRecording
+function isCallRecording(meeting: Call | CallRecording): meeting is CallRecording {
+  return (meeting as CallRecording).url !== undefined;
+}
+
 const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   const { endedCalls, upcomingCalls, callRecordings, isLoading } = useGetCalls();
   const router = useRouter();
@@ -71,7 +76,7 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
       {calls && calls.length > 0 ? (
         calls.map((meeting: Call | CallRecording) => (
           <MeetingCard
-            key={`${(meeting as Call)?.id}-${type}`}
+            key={`${isCall(meeting) ? meeting.id : meeting.filename}-${type}`}  // Unique key for each item
             icon={
               type === 'ended'
                 ? '/icons/previous.svg'
@@ -81,13 +86,13 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
             }
             title={
               isCall(meeting)
-                ? meeting.state?.custom?.description?.substring(0, 26) || meeting.filename?.substring(0, 20) || 'Personal Meeting'
+                ? meeting.state?.custom?.description?.substring(0, 26) || 'Personal Meeting'
                 : meeting.filename?.substring(0, 20) || 'Personal Meeting'
             }
             date={
               isCall(meeting)
-                ? meeting.state?.startsAt?.toLocaleString() || meeting.start_time.toLocaleString()
-                : meeting.start_time.toLocaleString()
+                ? meeting.state?.startsAt?.toLocaleString() || 'N/A'
+                : meeting.start_time?.toLocaleString() || 'N/A'
             }
             isPreviousMeeting={type === 'ended'}
             buttonIcon1={type === 'recordings' ? '/icons/play.svg' : undefined}
@@ -95,13 +100,22 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
             handleClick={
               type === 'recordings'
                 ? () => {
-                    router.push(`${meeting.url}`);
+                    if (isCallRecording(meeting)) {
+                      router.push(`${meeting.url}`);
+                    }
                   }
                 : () => {
-                    router.push(`/meeting/${meeting.id}`);
+                    if (isCall(meeting)) {
+                      router.push(`/meeting/${meeting.id}`);
+                    }
                   }
             }
-            link={type === 'recordings' ? meeting.url : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meeting.id}`}
+            link={type === 'recordings' && isCallRecording(meeting)
+              ? meeting.url
+              : isCall(meeting) 
+              ? `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meeting.id}`
+              : ''
+            }
           />
         ))
       ) : (
