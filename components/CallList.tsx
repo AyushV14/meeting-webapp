@@ -7,12 +7,15 @@ import React, { useEffect, useState } from 'react';
 import MeetingCard from './MeetingCard';
 import Loader from './Loader';
 
+// Type Guard to check if a meeting is of type Call
+function isCall(meeting: Call | CallRecording): meeting is Call {
+  return (meeting as Call).state !== undefined;
+}
 
 const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   const { endedCalls, upcomingCalls, callRecordings, isLoading } = useGetCalls();
   const router = useRouter();
   const [recordings, setRecordings] = useState<CallRecording[]>([]);
-  
 
   const getCalls = () => {
     switch (type) {
@@ -76,8 +79,16 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
                 ? '/icons/upcoming.svg'
                 : '/icons/recordings.svg'
             }
-            title={meeting.state?.custom.description?.substring(0, 26) || meeting.filename?.substring(0, 20) || 'Personal Meeting'}
-            date={meeting.state?.startsAt?.toLocaleString() || meeting.start_time.toLocaleString()}
+            title={
+              isCall(meeting)
+                ? meeting.state?.custom?.description?.substring(0, 26) || meeting.filename?.substring(0, 20) || 'Personal Meeting'
+                : meeting.filename?.substring(0, 20) || 'Personal Meeting'
+            }
+            date={
+              isCall(meeting)
+                ? meeting.state?.startsAt?.toLocaleString() || meeting.start_time.toLocaleString()
+                : meeting.start_time.toLocaleString()
+            }
             isPreviousMeeting={type === 'ended'}
             buttonIcon1={type === 'recordings' ? '/icons/play.svg' : undefined}
             buttonText={type === 'recordings' ? 'Play' : 'Start'}
