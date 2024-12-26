@@ -6,13 +6,13 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import MeetingCard from './MeetingCard';
 import Loader from './Loader';
-import { useToast } from '@/hooks/use-toast';
+
 
 const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   const { endedCalls, upcomingCalls, callRecordings, isLoading } = useGetCalls();
   const router = useRouter();
   const [recordings, setRecordings] = useState<CallRecording[]>([]);
-  const toast = useToast();
+  
 
   const getCalls = () => {
     switch (type) {
@@ -56,7 +56,7 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
     };
 
     if (type === 'recordings') fetchRecordings();
-  }, [type, callRecordings]); // Add `toast` to dependencies to avoid the warning
+  }, [type, callRecordings]);
 
   const calls = getCalls();
   const NoCallMessage = getNoCallsMessage();
