@@ -6,15 +6,15 @@ import MeetingSetup from '@/components/MeetingSetup';
 import { useGetCallById } from '@/hooks/useGetCallById';
 import { useUser } from '@clerk/nextjs';
 import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
-import React, { useState } from 'react';
+import React, { useState, use } from 'react';
 
 // 'params' is passed correctly by Next.js for dynamic routes
-const Meeting = ({ params }: { params: { id: string } }) => {
+const Meeting = ({params}: {params: Promise<{ id: string }>}) => {
   const { isLoaded } = useUser();
   const [isSetupComplete, setIsSetupComplete] = useState(false);
 
   // Directly access 'id' from 'params' without using React.use()
-  const { id } = params;
+  const { id } = use(params);
 
   const { call, isCallLoading } = useGetCallById(id);
 
