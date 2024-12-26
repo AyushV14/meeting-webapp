@@ -8,11 +8,12 @@ import { useUser } from '@clerk/nextjs';
 import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
 import React, { useState } from 'react';
 
+// Adjusting the type of 'params'
 const Meeting = ({ params }: { params: { id: string } }) => {
   const { isLoaded } = useUser();
   const [isSetupComplete, setIsSetupComplete] = useState(false);
 
-  const { id } = params;  // Directly access the `id` from `params`
+  const { id } = params;  // Directly access the 'id' from 'params'
 
   const { call, isCallLoading } = useGetCallById(id);
 
