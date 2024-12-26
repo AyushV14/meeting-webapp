@@ -52,12 +52,11 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
         setRecordings(recordings);
       } catch (error) {
         console.log(error);
-        toast({ title: 'Try again Later' });
       }
     };
 
     if (type === 'recordings') fetchRecordings();
-  }, [type, callRecordings, toast]); // Add `toast` to dependencies to avoid the warning
+  }, [type, callRecordings]); // Add `toast` to dependencies to avoid the warning
 
   const calls = getCalls();
   const NoCallMessage = getNoCallsMessage();
